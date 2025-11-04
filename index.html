@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <header class="header-section">
+      <h1>Javascript Quiz Game</h1>
+      <div class="info-boxes">
+        <div class="achievements-box">js achievements</div>
+        <div class="answers-box">
+          Current Score <span id="score-number">0</span>/10
+        </div>
+      </div>
+    </header>
+    <main class="main-section">
+      <section class="quiz-section">
+        <div class="quiz-header">
+          <h2>Javascript Quiz</h2>
+          <div>Time Remaining: <span id="time-remaining">60</span>s</div>
+        </div>
+        <div class="progress-section">
+          <label for="answer-progress"></label>
+          <progress id="answer-progress" value="0" max="10"></progress>
+        </div>
+        <div class="quiz-body">
+          <h3 id="question">Press Start to Begin</h3>
+          <div class="answer-section">
+            <button class="answer-button">Answer 1</button>
+            <button class="answer-button">Answer 2</button>
+            <button class="answer-button">Answer 3</button>
+          </div>
+        </div>
+        <button class="start-button" id="button-to-start">Start</button>
+      </section>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+    <script src="js/quizGame.js"></script>
+  </body>
+</html>
