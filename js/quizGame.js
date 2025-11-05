@@ -95,6 +95,9 @@ let quizAnswers = 0;
 let answeredQuestions = 0;
 let timerLeft = TOTAL_TIME;
 let randomizeQuestions = [];
+let answerList = [];
+let randomizeAnswers = [];
+let questionIndex = 0;
 
 // Event listener for the start button
 startButton.addEventListener("click", () => {
@@ -114,10 +117,10 @@ function startGame() {
   question.textContent = "";
   updateValues();
   updateProgressBar();
-  answerButtons.setAttribute("visibility", "visible");
   quizTimeRemaingClass.setAttribute("color", "white");
 
-  organizeQuestions();
+  randomizeQuestions = randomizeArray(questionKey);
+  askQuestions();
   startTimer();
 }
 
@@ -141,9 +144,32 @@ function blowConfetti() {
   });
 }
 
+// Asks the questions in order
+function askQuestions() {
+  let solutions = randomizeQuestions[questionIndex].solutions;
+  let randomNumber1 = Math.floor(Math.random() * solutions.length);
+  let randomNumber2 = 0;
+  do {
+    randomNumber2 = Math.floor(Math.random() * solutions.length);
+  } while (randomNumber2 != randomNumber1);
+  answerList.push(randomizeQuestions[questionIndex].answer);
+  answerList.push(solutions[randomNumber1]);
+  answerList.push();
+  randomizeAnswers = randomizeArray(answerList);
+  question.textContent = `${questionIndex + 1}. ${
+    randomizeQuestions[questionIndex].question
+  }`;
+  answerButtons.setAttribute("visibility", "visible");
+  answer1.textContent = randomizeAnswers[0];
+  answer2.textContent = randomizeAnswers[1];
+  answer3.textContent = randomizeAnswers[2];
+}
+
+// Gets RandomNumbe
+
 // Randomizes the questions
-function organizeQuestions() {
-  randomizeQuestions = questionKey
+function randomizeArray(unsortedArray) {
+  return unsortedArray
     .map((value) => ({ value, sort: Math.random() }))
     .sort((a, b) => a.sort - b.sort)
     .map(({ value }) => value);

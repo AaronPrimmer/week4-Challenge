@@ -125,7 +125,6 @@ progress#answer-progress {
   justify-content: center;
   gap: 1em;
   margin-bottom: 20px;
-  visibility: hidden;
 }
 
 .start-button {
