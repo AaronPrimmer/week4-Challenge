@@ -159,13 +159,13 @@ function startTimer() {
       endGame();
     } else if (timerLeft > 30) {
       //progressBar.setAttribute("accent-color", "hsl(120, 46%, 40%)");
-      //progressBar.style.accentColor = "#379537ff";
+      progressBar.style.accentColor = "#379537ff";
     } else if (timerLeft <= 30 && timerLeft > 10) {
       //progressBar.setAttribute("accent-color", "hsla(56, 100%, 70%, 1.00)");
-      //progressBar.style.accentColor = "#fff566ff";
+      progressBar.style.accentColor = "#fff566ff";
     } else if (timerLeft != 0 && timerLeft <= 10) {
       //progressBar.setAttribute("accent-color", "hsl(0, 100%, 70%)");
-      //progressBar.style.accentColor = "#ff6666ff";
+      progressBar.style.accentColor = "#ff6666ff";
     }
 
     timerLeft--;
