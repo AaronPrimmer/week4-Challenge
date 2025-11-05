@@ -123,9 +123,9 @@ table {
   border-spacing: 0;
 }
 
-/* progress {
-  -webkit-appearance: none;
-  appearance: none;
-  border: none;
-  overflow: hidden;
-} */
+progress {
+  /* Add other base styles like height, width, border-radius */
+  height: 20px;
+  overflow: hidden; /* Helps contain the inner bar with border-radius */
+  forced-color-adjust: preserve-parent-color;
+}

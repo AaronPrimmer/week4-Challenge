@@ -107,6 +107,7 @@ answer3.addEventListener("click", () => {});
 
 // Starts the current game, resetting values and starting the timer
 function startGame() {
+  startButton.disabled = true;
   quizAnswers = 0;
   answeredQuestions = 0;
   timeRemaining.textContent = `${TOTAL_TIME}`;
@@ -154,12 +155,14 @@ function endGame() {}
 // Starts the timer and the game begins
 function startTimer() {
   let quizInterval = setInterval(() => {
+    timerLeft--;
+    timeRemaining.textContent = timerLeft;
     if (timerLeft == 0) {
       clearInterval(quizInterval);
       endGame();
     } else if (timerLeft > 30) {
       //progressBar.setAttribute("accent-color", "hsl(120, 46%, 40%)");
-      progressBar.style.accentColor = "#379537ff";
+      progressBar.style.accentColor = "#379537ff)";
     } else if (timerLeft <= 30 && timerLeft > 10) {
       //progressBar.setAttribute("accent-color", "hsla(56, 100%, 70%, 1.00)");
       progressBar.style.accentColor = "#fff566ff";
@@ -168,8 +171,6 @@ function startTimer() {
       progressBar.style.accentColor = "#ff6666ff";
     }
 
-    timerLeft--;
-    timeRemaining.textContent = timerLeft;
     updateProgressBar();
   }, 1000);
 }
