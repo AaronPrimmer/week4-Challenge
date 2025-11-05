@@ -3,15 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Javascript Quiz Game</title>
+    <link rel="stylesheet" href="./css/reset.css" />
+    <link rel="stylesheet" href="./css/style.css" />
   </head>
   <body>
     <header class="header-section">
-      <h1>Javascript Quiz Game</h1>
+      <h1>Timed Quiz Game</h1>
       <div class="info-boxes">
-        <div class="achievements-box">js achievements</div>
+        <div class="achievements-box">JS achievements</div>
         <div class="answers-box">
-          Current Score <span id="score-number">0</span>/10
+          Current Score: <span id="score-number">0</span>/10
         </div>
       </div>
     </header>
@@ -19,18 +21,22 @@
       <section class="quiz-section">
         <div class="quiz-header">
           <h2>Javascript Quiz</h2>
-          <div>Time Remaining: <span id="time-remaining">60</span>s</div>
+          <div class="timer">
+            Time Remaining: <span id="time-remaining">60</span>s
+          </div>
         </div>
         <div class="progress-section">
-          <label for="answer-progress"></label>
-          <progress id="answer-progress" value="0" max="10"></progress>
+          <label for="answer-progress"
+            ><span id="progress-score">10</span> / 10</label
+          >
+          <progress id="answer-progress" value="60" max="60"></progress>
         </div>
         <div class="quiz-body">
           <h3 id="question">Press Start to Begin</h3>
-          <div class="answer-section">
-            <button class="answer-button">Answer 1</button>
-            <button class="answer-button">Answer 2</button>
-            <button class="answer-button">Answer 3</button>
+          <div class="answer-section" id="answer-buttons">
+            <button class="answer-button" id="answer-one">Answer 1</button>
+            <button class="answer-button" id="answer-two">Answer 2</button>
+            <button class="answer-button" id="answer-three">Answer 3</button>
           </div>
         </div>
         <button class="start-button" id="button-to-start">Start</button>
