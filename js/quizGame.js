@@ -91,6 +91,7 @@ const answer2 = document.getElementById("answer-two");
 const answer3 = document.getElementById("answer-three");
 const quizTimeRemaingClass = document.querySelector(".timer");
 const TOTAL_TIME = 60;
+let gameStarted = false;
 let quizAnswers = 0;
 let answeredQuestions = 0;
 let timerLeft = TOTAL_TIME;
@@ -98,30 +99,56 @@ let randomizeQuestions = [];
 let answerList = [];
 let randomizeAnswers = [];
 let questionIndex = 0;
+let quizInterval = "";
+
+// when document loads run the startGame function
+document.addEventListener("DOMContentLoaded", function () {
+  answerButtons.style.visibility = "hidden";
+});
 
 // Event listener for the start button
 startButton.addEventListener("click", () => {
-  startGame();
+  if (!gameStarted) {
+    startGame();
+  } else {
+    skipQuestion();
+  }
 });
 
-answer1.addEventListener("click", () => {});
-answer2.addEventListener("click", () => {});
-answer3.addEventListener("click", () => {});
+// Answer Buttons event listeners
+answer1.addEventListener("click", () => {
+  answerQuestions(answer1.textContent, answer1);
+});
+answer2.addEventListener("click", () => {
+  answerQuestions(answer2.textContent, answer2);
+});
+answer3.addEventListener("click", () => {
+  answerQuestions(answer3.textContent, answer3);
+});
 
 // Starts the current game, resetting values and starting the timer
 function startGame() {
-  startButton.disabled = true;
-  quizAnswers = 0;
-  answeredQuestions = 0;
-  timeRemaining.textContent = `${TOTAL_TIME}`;
-  question.textContent = "";
-  updateValues();
-  updateProgressBar();
-  quizTimeRemaingClass.setAttribute("color", "white");
+  if (!gameStarted) {
+    gameStarted = true;
+    startButton.classList.add("start-button-gray");
+    startButton.classList.remove("start-button");
+    startButton.textContent = "Skip";
+    quizAnswers = 0;
+    answeredQuestions = 0;
+    questionIndex = 0;
+    timerLeft = TOTAL_TIME;
+    timeRemaining.textContent = `${TOTAL_TIME}`;
+    question.textContent = "";
+    updateValues();
+    updateProgressBar();
+    progressBar.style.accentColor = "hsla(120, 100%, 68%, 1.00)";
+    quizTimeRemaingClass.setAttribute("color", "white");
+    answerButtons.style.visibility = "visible";
 
-  randomizeQuestions = randomizeArray(questionKey);
-  askQuestions();
-  startTimer();
+    randomizeQuestions = randomizeArray(questionKey);
+    askQuestions();
+    startTimer();
+  }
 }
 
 // Updates the values of the current score and progress bar
@@ -146,26 +173,70 @@ function blowConfetti() {
 
 // Asks the questions in order
 function askQuestions() {
+  enableButtons();
+  answerList = [];
   let solutions = randomizeQuestions[questionIndex].solutions;
   let randomNumber1 = Math.floor(Math.random() * solutions.length);
   let randomNumber2 = 0;
   do {
     randomNumber2 = Math.floor(Math.random() * solutions.length);
-  } while (randomNumber2 != randomNumber1);
+  } while (randomNumber2 == randomNumber1 || randomNumber2 == 0);
   answerList.push(randomizeQuestions[questionIndex].answer);
   answerList.push(solutions[randomNumber1]);
-  answerList.push();
+  answerList.push(solutions[randomNumber2]);
   randomizeAnswers = randomizeArray(answerList);
   question.textContent = `${questionIndex + 1}. ${
     randomizeQuestions[questionIndex].question
   }`;
-  answerButtons.setAttribute("visibility", "visible");
   answer1.textContent = randomizeAnswers[0];
   answer2.textContent = randomizeAnswers[1];
   answer3.textContent = randomizeAnswers[2];
 }
 
-// Gets RandomNumbe
+// Disable buttons
+function disableButtons() {
+  answer1.disabled = true;
+  answer2.disabled = true;
+  answer3.disabled = true;
+}
+
+// Enable buttons
+function enableButtons() {
+  answer1.disabled = false;
+  answer2.disabled = false;
+  answer3.disabled = false;
+}
+
+// Checks Answered Questions
+function answerQuestions(answer, button) {
+  if (randomizeQuestions[questionIndex].answer == answer) {
+    button.textContent = button.textContent + "✅";
+    quizAnswers++;
+  } else {
+    button.textContent = button.textContent + "❌";
+  }
+  disableButtons();
+  updateValues();
+  questionIndex++;
+  setTimeout(function () {
+    if (questionIndex != 10) {
+      askQuestions();
+    } else if (questionIndex == 10) {
+      endGame();
+    }
+  }, 1000);
+}
+
+function skipQuestion() {
+  if (gameStarted) {
+    questionIndex++;
+    if (questionIndex != 10) {
+      askQuestions();
+    } else if (questionIndex == 10) {
+      endGame();
+    }
+  }
+}
 
 // Randomizes the questions
 function randomizeArray(unsortedArray) {
@@ -176,25 +247,35 @@ function randomizeArray(unsortedArray) {
 }
 
 // End the game
-function endGame() {}
+function endGame() {
+  clearInterval(quizInterval);
+  answerButtons.style.visibility = "hidden";
+  question.textContent = "";
+  if (quizAnswers == 10) {
+    blowConfetti();
+  }
+
+  startButton.textContent = "Retry";
+  startButton.classList.add("start-button");
+  startButton.classList.remove("start-button-gray");
+  startButton.disabled = false;
+  console.log(`Your Score: ${quizAnswers}/10`);
+  gameStarted = false;
+}
 
 // Starts the timer and the game begins
 function startTimer() {
-  let quizInterval = setInterval(() => {
+  quizInterval = setInterval(() => {
     timerLeft--;
     timeRemaining.textContent = timerLeft;
     if (timerLeft == 0) {
-      clearInterval(quizInterval);
       endGame();
     } else if (timerLeft > 30) {
-      //progressBar.setAttribute("accent-color", "hsl(120, 46%, 40%)");
-      progressBar.style.accentColor = "#379537ff)";
+      progressBar.style.accentColor = "hsla(120, 100%, 68%, 1.00)";
     } else if (timerLeft <= 30 && timerLeft > 10) {
-      //progressBar.setAttribute("accent-color", "hsla(56, 100%, 70%, 1.00)");
-      progressBar.style.accentColor = "#fff566ff";
+      progressBar.style.accentColor = "hsla(56, 100%, 70%, 1.00)";
     } else if (timerLeft != 0 && timerLeft <= 10) {
-      //progressBar.setAttribute("accent-color", "hsl(0, 100%, 70%)");
-      progressBar.style.accentColor = "#ff6666ff";
+      progressBar.style.accentColor = "hsla(0, 100%, 70%, 1.00)";
     }
 
     updateProgressBar();

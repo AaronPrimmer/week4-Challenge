@@ -149,6 +149,25 @@ progress#answer-progress {
   transition: background-color 0.2s ease-in-out;
 }
 
+.start-button-gray {
+  margin-top: 20px;
+  color: black;
+  background-color: hsl(0, 0%, 80%);
+  box-shadow: none;
+  border: none;
+  padding: 5px 10px;
+  font-size: 2rem;
+  border-radius: 10px;
+}
+
+.start-button-gray:hover {
+  background-color: hsl(0, 0%, 75%);
+}
+
+.start-button-gray:active {
+  background-color: hsl(0, 0%, 85%);
+}
+
 .answer-button:hover {
   background-color: hsl(0, 0%, 75%);
 }
