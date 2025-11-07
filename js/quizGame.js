@@ -6,7 +6,7 @@ const questionKey = [
   },
   {
     question: "What was Javascript's original name?",
-    answer: "Livescript",
+    answer: "Mocha",
     solutions: ["Truescript", "Funscript", "C-script", "Junoscript"],
   },
   {
