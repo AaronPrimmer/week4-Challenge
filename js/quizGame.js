@@ -86,9 +86,6 @@ const startButton = document.getElementById("button-to-start");
 const timeRemaining = document.getElementById("time-remaining");
 const question = document.getElementById("question");
 const answerButtons = document.getElementById("answer-buttons");
-const answer1 = document.getElementById("answer-one");
-const answer2 = document.getElementById("answer-two");
-const answer3 = document.getElementById("answer-three");
 const quizTimeRemaingClass = document.querySelector(".timer");
 const TOTAL_TIME = 60;
 let gameStarted = false;
@@ -113,17 +110,6 @@ startButton.addEventListener("click", () => {
   } else {
     skipQuestion();
   }
-});
-
-// Answer Buttons event listeners
-answer1.addEventListener("click", () => {
-  answerQuestions(answer1.textContent, answer1);
-});
-answer2.addEventListener("click", () => {
-  answerQuestions(answer2.textContent, answer2);
-});
-answer3.addEventListener("click", () => {
-  answerQuestions(answer3.textContent, answer3);
 });
 
 // Starts the current game, resetting values and starting the timer
@@ -173,7 +159,7 @@ function blowConfetti() {
 
 // Asks the questions in order
 function askQuestions() {
-  enableButtons();
+  //enableButtons();
   answerList = [];
   let solutions = randomizeQuestions[questionIndex].solutions;
   let randomNumber1 = Math.floor(Math.random() * solutions.length);
@@ -188,53 +174,63 @@ function askQuestions() {
   question.textContent = `${questionIndex + 1}. ${
     randomizeQuestions[questionIndex].question
   }`;
-  answer1.textContent = randomizeAnswers[0];
-  answer2.textContent = randomizeAnswers[1];
-  answer3.textContent = randomizeAnswers[2];
+  for (let answer of randomizeAnswers) {
+    let answerButton = document.createElement("button");
+    answerButton.textContent = answer;
+    answerButton.classList.add("answer-button");
+    answerButton.setAttribute("data-answer", answer);
+    answerButtons.appendChild(answerButton);
+
+    answerButton.addEventListener("click", () => {
+      answerQuestions(answerButton.dataset.answer, answerButton);
+    });
+  }
 }
 
-// Disable buttons
+// Disables all buttons before removal
 function disableButtons() {
-  answer1.disabled = true;
-  answer2.disabled = true;
-  answer3.disabled = true;
+  for (const button of answerButtons.children) {
+    button.disabled = true;
+  }
 }
 
-// Enable buttons
-function enableButtons() {
-  answer1.disabled = false;
-  answer2.disabled = false;
-  answer3.disabled = false;
+// Removes all buttons under answerButtons
+function removeAllButtons() {
+  while (answerButtons.firstChild) {
+    answerButtons.removeChild(answerButtons.firstChild);
+  }
 }
 
 // Checks Answered Questions
 function answerQuestions(answer, button) {
+  disableButtons();
   if (randomizeQuestions[questionIndex].answer == answer) {
     button.textContent = button.textContent + "✅";
     quizAnswers++;
   } else {
     button.textContent = button.textContent + "❌";
   }
-  disableButtons();
   updateValues();
   questionIndex++;
   setTimeout(function () {
-    if (questionIndex != 10) {
-      askQuestions();
-    } else if (questionIndex == 10) {
-      endGame();
-    }
+    checkQuestionStatus();
   }, 1000);
 }
 
 function skipQuestion() {
   if (gameStarted) {
     questionIndex++;
-    if (questionIndex != 10) {
-      askQuestions();
-    } else if (questionIndex == 10) {
-      endGame();
-    }
+    checkQuestionStatus();
+  }
+}
+
+// Checks the questionIndex to see if game is still going
+function checkQuestionStatus() {
+  if (questionIndex != 10) {
+    removeAllButtons();
+    askQuestions();
+  } else if (questionIndex == 10) {
+    endGame();
   }
 }
 
@@ -249,8 +245,15 @@ function randomizeArray(unsortedArray) {
 // End the game
 function endGame() {
   clearInterval(quizInterval);
+  removeAllButtons();
   answerButtons.style.visibility = "hidden";
-  question.textContent = "";
+  if (quizAnswers == 10) {
+    question.textContent = "Congratulations! Perfect Score!";
+  } else if (quizAnswers > 7) {
+    question.textContent = "So Close! Try Again!";
+  } else {
+    question.textContent = "Better Luck Next Time";
+  }
   if (quizAnswers == 10) {
     blowConfetti();
   }
