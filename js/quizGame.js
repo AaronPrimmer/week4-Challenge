@@ -229,7 +229,7 @@ function checkQuestionStatus() {
   if (questionIndex != 10) {
     removeAllButtons();
     askQuestions();
-  } else if (questionIndex == 10) {
+  } else if (questionIndex == 10 && gameStarted) {
     endGame();
   }
 }
@@ -244,6 +244,7 @@ function randomizeArray(unsortedArray) {
 
 // End the game
 function endGame() {
+  gameStarted = false;
   clearInterval(quizInterval);
   removeAllButtons();
   answerButtons.style.visibility = "hidden";
@@ -263,7 +264,6 @@ function endGame() {
   startButton.classList.remove("start-button-gray");
   startButton.disabled = false;
   console.log(`Your Score: ${quizAnswers}/10`);
-  gameStarted = false;
 }
 
 // Starts the timer and the game begins
@@ -271,7 +271,7 @@ function startTimer() {
   quizInterval = setInterval(() => {
     timerLeft--;
     timeRemaining.textContent = timerLeft;
-    if (timerLeft == 0) {
+    if (timerLeft == 0 && gameStarted) {
       endGame();
     } else if (timerLeft > 30) {
       progressBar.style.accentColor = "hsla(120, 100%, 68%, 1.00)";
